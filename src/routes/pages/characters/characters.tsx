@@ -1,8 +1,9 @@
-import { API_URL } from "@/lib/utils";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { fetchData } from "@/lib/get-functions";
+import { getIdFromUrl } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router";
 
-export type Character = {
+export type TCharacter = {
   name: string;
   birth_year: string;
   eye_color: string;
@@ -22,40 +23,29 @@ export type Character = {
 };
 
 export function Characters() {
-  const [characters, setCharacters] = useState<Character[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/people`);
-        setCharacters(response.data.results);
-        setIsLoading(false);
-      } catch (err) {
-        console.error(err);
-        setError(
-          err instanceof Error ? err.message : "Une errreur est survenue"
-        );
-        setIsLoading(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["characters"],
+    queryFn: () => fetchData<TCharacter>("people"),
+  });
 
   if (isLoading) return "Chargement...";
 
-  if (error) return error;
+  if (error) return error.message;
+
+  if (!data || !data.results) {
+    return <div>Aucune donnée disponible</div>;
+  }
 
   return (
     <>
-      {!!characters.length ? (
+      {!!data.results.length ? (
         <ul>
-          {characters.map((character) => (
-            <li>{character.name}</li>
+          {data.results.map((character) => (
+            <li key={character.url}>
+              <Link to={`${getIdFromUrl({ url: character.url })}`}>
+                {character.name}
+              </Link>
+            </li>
           ))}
         </ul>
       ) : (
