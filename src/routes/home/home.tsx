@@ -1,10 +1,10 @@
-import { Outlet } from "react-router";
+import { Navigation } from "@/components/navigation";
+import { Wrapper } from "@/components/wrapper";
 
 export default function Home() {
   return (
-    <>
-      <Outlet />
-      Home
-    </>
+    <Wrapper>
+      <Navigation />
+    </Wrapper>
   );
 }
