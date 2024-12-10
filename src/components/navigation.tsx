@@ -3,7 +3,7 @@ import { Link, LinkProps } from "react-router";
 export function Navigation() {
   return (
     <nav>
-      <ul className="flex flex-wrap gap-4">
+      <menu className="flex flex-wrap gap-4">
         <CustomLink src="/assets/character.png" to="/characters">
           Characters
         </CustomLink>
@@ -26,7 +26,7 @@ export function Navigation() {
         <CustomLink src="/assets/species.png" to="/species">
           Species
         </CustomLink>
-      </ul>
+      </menu>
     </nav>
   );
 }
