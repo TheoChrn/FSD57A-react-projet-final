@@ -9,6 +9,7 @@ import { Starships } from "@/routes/pages/starships/starships";
 import { Planets } from "@/routes/pages/planets/planets";
 import { Species } from "@/routes/pages/species/species";
 import { RootLayout } from "@/routes/root-layout";
+import { Character } from "@/routes/pages/characters/characterId/character";
 
 export function Router() {
   return (
@@ -18,7 +19,11 @@ export function Router() {
           <Route index element={<Home />} />
           <Route path="*" element={<NotFound />} />
           <Route element={<PagesLayout />}>
-            <Route path="/characters" element={<Characters />} />
+            <Route path="/characters">
+              <Route index element={<Characters />} />
+              <Route path=":characterId" element={<Character />} />
+            </Route>
+
             <Route path="/movies" element={<Movies />} />
             <Route path="/vehicles" element={<Vehicles />} />
             <Route path="/starships" element={<Starships />} />

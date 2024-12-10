@@ -6,3 +6,5 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const API_URL = import.meta.env.VITE_API_BASE_URL;
+export const getIdFromUrl = ({ url }: { url: string }) =>
+  url.split("/").filter(Boolean).pop();
