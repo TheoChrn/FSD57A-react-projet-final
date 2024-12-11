@@ -56,7 +56,7 @@ const CustomLink = ({ children, position, ...props }: CustomLink) => {
       <Link {...props}>
         <figure className="group-hover:animate-pulse relative">
           <img
-            src="/assets/hologram.png"
+            src="/FSD57A-react-projet-final/assets/hologram.png"
             height={150}
             width={150}
             className="w-full"
@@ -67,6 +67,7 @@ const CustomLink = ({ children, position, ...props }: CustomLink) => {
               position ? position : "left-1/2"
             }`}
             src={props.src}
+            alt="Image illustration"
           />
         </figure>
         <span className="text-2xl"> {children}</span>
