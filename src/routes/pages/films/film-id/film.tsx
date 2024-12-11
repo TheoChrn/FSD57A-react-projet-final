@@ -104,9 +104,7 @@ export function Film() {
     ReturnType<ReturnType<typeof filmLoader>>
   >;
   const dispatch = useDispatch();
-  const watchList = useSelector(
-    (state: RootState) => state.watchList.watchList
-  );
+  const watchList = useSelector((state: RootState) => state.watchList);
 
   const { data: film, error } = useSuspenseQuery(
     queryOptions({
@@ -117,6 +115,11 @@ export function Film() {
 
   const relatedQueries = useSuspenseQueries({
     queries: [
+      ...film.characters.map((url) => ({
+        queryKey: ["planet", getIdFromUrl({ url })],
+        queryFn: () =>
+          fetchDataById<TPlanet>(`planets/${getIdFromUrl({ url })}`),
+      })),
       ...film.characters.map((url) => ({
         queryKey: ["character", getIdFromUrl({ url })],
         queryFn: () =>
@@ -227,22 +230,12 @@ export function Film() {
           <SectionTitle>Related Vehicles and Starships</SectionTitle>
           <SectionItems>
             {populatedFilm.vehicles.map((v) => (
-              <SectionLinkItem
-                key={v.url}
-                to={`/vehicles/${getIdFromUrl({ url: v.url })}`}
-              >
-                {v.name}
-              </SectionLinkItem>
+              <li key={v.url}>{v.name}</li>
             ))}
           </SectionItems>
           <SectionItems>
             {populatedFilm.starships.map((s) => (
-              <SectionLinkItem
-                key={s.url}
-                to={`/starships/${getIdFromUrl({ url: s.url })}`}
-              >
-                {s.name}
-              </SectionLinkItem>
+              <li key={s.url}>{s.name}</li>
             ))}
           </SectionItems>
         </Section>
@@ -269,12 +262,7 @@ export function Film() {
           <SectionTitle>Related Planets</SectionTitle>
           <SectionItems>
             {populatedFilm.planets.map((p) => (
-              <SectionLinkItem
-                key={p.url}
-                to={`/planets/${getIdFromUrl({ url: p.url })}`}
-              >
-                {p.name}
-              </SectionLinkItem>
+              <li key={p.url}>{p.name}</li>
             ))}
           </SectionItems>
         </Section>
@@ -285,12 +273,7 @@ export function Film() {
           <SectionTitle>Related Species</SectionTitle>
           <SectionItems>
             {populatedFilm.species.map((s) => (
-              <SectionLinkItem
-                key={s.url}
-                to={`/species/${getIdFromUrl({ url: s.url })}`}
-              >
-                {s.name}
-              </SectionLinkItem>
+              <li key={s.url}>{s.name}</li>
             ))}
           </SectionItems>
         </Section>

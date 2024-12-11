@@ -17,6 +17,9 @@ import { Provider } from "react-redux";
 import { store } from "@/app/store";
 import { Films, filmsLoader } from "@/routes/pages/films/films";
 import { Film, filmLoader } from "@/routes/pages/films/film-id/film";
+import { Spinner } from "@/components/spinner";
+import { SubPageLoader } from "@/components/sub-page-loader";
+import ErrorPage from "@/routes/error-page";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,56 +36,62 @@ const router = createBrowserRouter([
 
     children: [
       {
-        path: "*",
-        element: <NotFound />,
-      },
-      {
         index: true,
         element: <Home />,
       },
       {
         element: <PagesLayout />,
-        errorElement: <NotFound />,
+        errorElement: <ErrorPage />,
         children: [
+          {
+            path: "*",
+            element: <NotFound />,
+          },
           {
             path: "characters",
             loader: charactersLoader(queryClient),
             element: (
-              <Suspense fallback="Chargement...">
+              <Suspense
+                fallback={<SubPageLoader>Loading characters</SubPageLoader>}
+              >
                 <Characters />
               </Suspense>
             ),
-            errorElement: <NotFound />,
+            errorElement: <ErrorPage />,
           },
           {
             path: "characters/:characterId",
             element: (
-              <Suspense fallback="Chargement du personnage...">
+              <Suspense
+                fallback={<SubPageLoader>Loading character</SubPageLoader>}
+              >
                 <Character />
               </Suspense>
             ),
             loader: characterLoader(queryClient),
-            errorElement: <NotFound />,
+            errorElement: <ErrorPage />,
           },
           {
             path: "films",
             loader: filmsLoader(queryClient),
             element: (
-              <Suspense fallback="Chargement...">
+              <Suspense
+                fallback={<SubPageLoader>Loading movies</SubPageLoader>}
+              >
                 <Films />
               </Suspense>
             ),
-            errorElement: <NotFound />,
+            errorElement: <ErrorPage />,
           },
           {
             path: "films/:filmId",
             element: (
-              <Suspense fallback="Chargement du personnage...">
+              <Suspense fallback={<SubPageLoader>Loading movie</SubPageLoader>}>
                 <Film />
               </Suspense>
             ),
             loader: filmLoader(queryClient),
-            errorElement: <NotFound />,
+            errorElement: <ErrorPage />,
           },
         ],
       },

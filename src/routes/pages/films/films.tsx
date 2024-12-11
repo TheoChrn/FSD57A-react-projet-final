@@ -16,19 +16,18 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router";
 
-export const filmsLoader = (queryClient: QueryClient) => async () =>
+export const filmsLoader = (queryClient: QueryClient) => async () => {
   await queryClient.ensureQueryData(
     queryOptions({
       queryKey: ["films"],
       queryFn: () => fetchData<TFilm>("films"),
     })
   );
+};
 
 export function Films() {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const watchList = useSelector(
-    (state: RootState) => state.watchList.watchList
-  );
+  const watchList = useSelector((state: RootState) => state.watchList);
 
   const dispatch = useDispatch();
 

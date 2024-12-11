@@ -1,17 +1,34 @@
+import { RootState } from "@/app/store";
 import clsx from "clsx";
+import { useSelector } from "react-redux";
 import { NavLinkProps, NavLinkRenderProps } from "react-router";
 import { NavLink } from "react-router";
 
 export function SubPageNavigation() {
+  const favorites = useSelector((state: RootState) => state.favorites);
+  const watchList = useSelector((state: RootState) => state.watchList);
+
   return (
     <nav>
       <menu className="flex flex-wrap gap-3 justify-center">
         <CustomNavLink to={"/characters"}>Characters</CustomNavLink>
         <CustomNavLink to={"/films"}>Movies</CustomNavLink>
-        <CustomNavLink to={"/vehicles"}>Vehicles</CustomNavLink>
-        <CustomNavLink to={"/starships"}>Starships</CustomNavLink>
-        <CustomNavLink to={"/planets"}>Planets</CustomNavLink>
-        <CustomNavLink to={"/species"}>Species</CustomNavLink>
+        <CustomNavLink className="relative" to={"/favorites"}>
+          Favorites
+          {!!favorites.length && (
+            <span className="absolute -top-1 -left-1 bg-accent  rounded-full size-4 flex justify-center items-center  text-xs text-accent-foreground">
+              {favorites.length}
+            </span>
+          )}
+        </CustomNavLink>
+        <CustomNavLink className="relative" to={"/watch list"}>
+          Watch list
+          {!!watchList.length && (
+            <span className="absolute -top-1 -left-1 bg-accent  rounded-full size-4 flex justify-center items-center  text-xs text-accent-foreground">
+              {watchList.length}
+            </span>
+          )}
+        </CustomNavLink>
       </menu>
     </nav>
   );

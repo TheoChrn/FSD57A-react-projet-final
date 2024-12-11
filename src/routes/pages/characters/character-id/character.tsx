@@ -97,9 +97,7 @@ export function Character() {
     ReturnType<ReturnType<typeof characterLoader>>
   >;
   const dispatch = useDispatch();
-  const favorites = useSelector(
-    (state: RootState) => state.favorites.favorites
-  );
+  const favorites = useSelector((state: RootState) => state.favorites);
 
   const { data: character, error } = useSuspenseQuery(
     queryOptions({
@@ -213,31 +211,14 @@ export function Character() {
             Skin Color: {populatedCharacter.skin_color}
           </li>
           <li className="capitalize">
-            Homeworld:{" "}
-            <Link
-              to={`/plantets/${getIdFromUrl({
-                url: character.homeworld,
-              })}`}
-              className="text-accent underline"
-            >
-              {populatedCharacter.homeworld.name}
-            </Link>
+            Homeworld: {populatedCharacter.homeworld.name}
           </li>
           <li className="">
             Species:{" "}
             {!!populatedCharacter.species.length ? (
               <ul className="inline-block">
                 {populatedCharacter.species.map((spece) => (
-                  <li key={spece.url}>
-                    <Link
-                      to={`/species/${getIdFromUrl({
-                        url: spece.url,
-                      })}`}
-                      className="text-accent underline"
-                    >
-                      {spece.name}
-                    </Link>
-                  </li>
+                  <li key={spece.url}>{spece.name}</li>
                 ))}
               </ul>
             ) : (
@@ -253,24 +234,10 @@ export function Character() {
           <h2 className="text-xl">Vehicles and Starships</h2>
           <ul>
             {populatedCharacter.vehicles.map((v) => (
-              <li key={v.url}>
-                <Link
-                  className="text-accent underline"
-                  to={`/vehicles/${getIdFromUrl({ url: v.url })}`}
-                >
-                  {v.name}
-                </Link>
-              </li>
+              <li key={v.url}>{v.name}</li>
             ))}
             {populatedCharacter.starships.map((s) => (
-              <li key={s.url}>
-                <Link
-                  className="text-accent underline"
-                  to={`/starships/${getIdFromUrl({ url: s.url })}`}
-                >
-                  {s.name}
-                </Link>
-              </li>
+              <li key={s.url}>{s.name}</li>
             ))}
           </ul>
         </section>

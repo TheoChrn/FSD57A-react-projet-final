@@ -1,25 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface FavoritesState {
-  watchList: string[];
-}
-
-const initialState: FavoritesState = {
-  watchList: [],
-};
+const initialState: string[] = [];
 
 export const watchListSlice = createSlice({
   name: "watchList",
   initialState,
   reducers: {
     addToWatchList: (state, action: PayloadAction<string>) => {
-      if (state.watchList.includes(action.payload)) return;
-      state.watchList.push(action.payload);
+      if (state.includes(action.payload)) return;
+      state.push(action.payload);
     },
     removeFromWatchList: (state, action: PayloadAction<string>) => {
-      const index = state.watchList.findIndex((f) => f === action.payload);
+      const index = state.findIndex((f) => f === action.payload);
       console.log(index);
-      if (index !== -1) state.watchList.splice(index, 1);
+      if (index !== -1) state.splice(index, 1);
     },
   },
 });

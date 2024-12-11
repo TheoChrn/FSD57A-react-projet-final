@@ -1,4 +1,5 @@
 import { RootState } from "@/app/store";
+import { CustomPagination } from "@/components/pagination";
 import {
   addToFavorites,
   removeFromFavorites,
@@ -13,34 +14,51 @@ import {
 } from "@tanstack/react-query";
 import { Heart } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router";
+import {
+  ClientLoaderFunctionArgs,
+  Link,
+  LoaderFunctionArgs,
+  useLoaderData,
+} from "react-router";
 
-export const charactersLoader = (queryClient: QueryClient) => async () =>
-  await queryClient.ensureQueryData(
-    queryOptions({
-      queryKey: ["characters"],
-      queryFn: () => fetchData<TCharacter>("people"),
-    })
-  );
+export const charactersLoader =
+  (queryClient: QueryClient) =>
+  async ({ request }: LoaderFunctionArgs) => {
+    const url = new URL(request.url);
+    const searchParams = url.searchParams;
+    const page = searchParams.get("page") || "1";
+
+    await queryClient.ensureQueryData(
+      queryOptions({
+        queryKey: ["characters", page],
+        queryFn: () => fetchData<TCharacter>(`people?page=${page}`),
+      })
+    );
+
+    return { page };
+  };
 
 export function Characters() {
   const favorites = useSelector(
-    (state: RootState) => state.favorites.favorites
+    (state: RootState) => state.favorites
   );
+  const { page = "1" } = useLoaderData() as Awaited<
+    ReturnType<ReturnType<typeof charactersLoader>>
+  >;
 
   const dispatch = useDispatch();
 
-  const {
-    data: { results: characters },
-    error,
-  } = useSuspenseQuery(
+  const { data, error } = useSuspenseQuery(
     queryOptions({
-      queryKey: ["characters"],
-      queryFn: () => fetchData<TCharacter>("people"),
+      queryKey: ["characters", page],
+      queryFn: () => fetchData<TCharacter>(`people?page=${page}`),
     })
   );
 
   if (error) return error.message;
+  const { results: characters } = data;
+
+  const maxPages = Math.floor(data.count / 10);
 
   return (
     <>
@@ -76,6 +94,8 @@ export function Characters() {
       ) : (
         <span>Aucun personnage trouvé</span>
       )}
+
+      <CustomPagination currentPage={Number(page)} maxPages={maxPages} />
     </>
   );
 }

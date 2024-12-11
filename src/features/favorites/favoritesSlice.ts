@@ -1,24 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface FavoritesState {
-  favorites: string[];
-}
-
-const initialState: FavoritesState = {
-  favorites: [],
-};
+const initialState: string[] = [];
 
 export const favoriteSlice = createSlice({
   name: "favorites",
   initialState,
   reducers: {
     addToFavorites: (state, action: PayloadAction<string>) => {
-      if (state.favorites.includes(action.payload)) return;
-      state.favorites.push(action.payload);
+      if (state.includes(action.payload)) return;
+      state.push(action.payload);
     },
     removeFromFavorites: (state, action: PayloadAction<string>) => {
-      const index = state.favorites.findIndex((f) => f === action.payload);
-      if (index !== -1) state.favorites.splice(index, 1);
+      const index = state.findIndex((f) => f === action.payload);
+      if (index !== -1) state.splice(index, 1);
     },
   },
 });
