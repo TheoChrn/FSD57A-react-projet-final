@@ -13,6 +13,8 @@ import {
 } from "@/routes/pages/characters/characterId/character";
 import { Suspense } from "react";
 import { QueryClient } from "@tanstack/react-query";
+import { Provider } from "react-redux";
+import { store } from "@/app/store";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -67,5 +69,9 @@ const router = createBrowserRouter([
 ]);
 
 export function Router() {
-  return <RouterProvider router={router} />;
+  return (
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  );
 }
