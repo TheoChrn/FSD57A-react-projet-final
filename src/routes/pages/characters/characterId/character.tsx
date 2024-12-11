@@ -1,3 +1,8 @@
+import { RootState } from "@/app/store";
+import {
+  addToFavorites,
+  removeFromFavorites,
+} from "@/features/favorites/favoritesSlice";
 import { fetchDataById } from "@/lib/get-functions";
 import {
   TCharacter,
@@ -15,6 +20,8 @@ import {
   useSuspenseQueries,
   useSuspenseQuery,
 } from "@tanstack/react-query";
+import { Heart } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, LoaderFunctionArgs, useLoaderData } from "react-router";
 
 export const characterLoader =
@@ -89,6 +96,11 @@ export function Character() {
   const { characterId } = useLoaderData() as Awaited<
     ReturnType<ReturnType<typeof characterLoader>>
   >;
+  const dispatch = useDispatch();
+  const favorites = useSelector(
+    (state: RootState) => state.favorites.favorites
+  );
+
   const { data: character, error } = useSuspenseQuery(
     queryOptions({
       queryKey: ["character", characterId],
@@ -161,7 +173,27 @@ export function Character() {
 
   return (
     <section className="space-y-8 text-center">
-      <h1 className="text-3xl">{populatedCharacter.name}</h1>
+      <h1
+        data-favorite={favorites.includes(character.url) ? "" : undefined}
+        className="group text-3xl"
+      >
+        {populatedCharacter.name}{" "}
+        <button
+          onClick={() =>
+            dispatch(
+              favorites.includes(character.url)
+                ? removeFromFavorites(character.url)
+                : addToFavorites(character.url)
+            )
+          }
+        >
+          <Heart
+            className="hover:fill-red-500/40 hover:stroke-red-500/40 hover:scale-110 duration-200 active:scale-100 group-data-[favorite]:fill-red-500 group-data-[favorite]:stroke-red-500"
+            size={24}
+          />
+          <span className="sr-only">Add to favrites</span>
+        </button>
+      </h1>
       <section className="space-y-2">
         <h2 className="text-xl">Character Details</h2>
         <ul>
