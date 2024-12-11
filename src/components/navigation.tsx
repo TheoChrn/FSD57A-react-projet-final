@@ -45,7 +45,7 @@ const CustomLink = ({ children, position, ...props }: CustomLink) => {
             height={150}
             width={150}
             className="w-full"
-            alt="mx-auto"
+            alt={"Image preview de la page"}
           />
           <img
             className={`group-hover:animate-float absolute w-32 top-[40%] opacity-50 -translate-x-1/2  -translate-y-1/2 ${
