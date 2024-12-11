@@ -5,7 +5,7 @@ import { NavLink } from "react-router";
 export function SubPageNavigation() {
   return (
     <nav>
-      <menu className="flex flex-col items-center md:flex-row gap-3 md:justify-center">
+      <menu className="flex flex-wrap gap-3 justify-center">
         <CustomNavLink to={"/characters"}>Characters</CustomNavLink>
         <CustomNavLink to={"/movies"}>Movies</CustomNavLink>
         <CustomNavLink to={"/vehicles"}>Vehicles</CustomNavLink>
@@ -24,7 +24,10 @@ const CustomNavLink = ({ children, ...props }: TCustomNavLink) => {
     <NavLink
       {...props}
       className={({ isActive }) =>
-        clsx("group relative", isActive ? "text-accent" : "hover:text-accent")
+        clsx(
+          "group relative text-center",
+          isActive ? "text-accent" : "hover:text-accent"
+        )
       }
     >
       {({ isActive, isPending, isTransitioning }: NavLinkRenderProps) => (
