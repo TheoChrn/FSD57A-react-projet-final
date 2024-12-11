@@ -4,26 +4,41 @@ export function Navigation() {
   return (
     <nav>
       <menu className="flex flex-wrap gap-4">
-        <CustomLink src="/assets/character.png" to="/characters">
+        <CustomLink
+          src="/FSD57A-react-projet-final/assets/character.png"
+          to="/characters"
+        >
           Characters
         </CustomLink>
         <CustomLink
           position="left-[55%]"
-          src="/assets/cinema-camera.png"
+          src="/FSD57A-react-projet-final/assets/cinema-camera.png"
           to="/films"
         >
           Movies
         </CustomLink>
-        <CustomLink src="/assets/vehicle.png" to="/vehicles">
+        <CustomLink
+          src="/FSD57A-react-projet-final/assets/vehicle.png"
+          to="/vehicles"
+        >
           Vehicles
         </CustomLink>
-        <CustomLink src="/assets/starship.png" to="/starships">
+        <CustomLink
+          src="/FSD57A-react-projet-final/assets/starship.png"
+          to="/starships"
+        >
           Starships
         </CustomLink>
-        <CustomLink src="/assets/planet.png" to="/planets">
+        <CustomLink
+          src="/FSD57A-react-projet-final/assets/planet.png"
+          to="/planets"
+        >
           Planets
         </CustomLink>
-        <CustomLink src="/assets/species.png" to="/species">
+        <CustomLink
+          src="/FSD57A-react-projet-final/assets/species.png"
+          to="/species"
+        >
           Species
         </CustomLink>
       </menu>
