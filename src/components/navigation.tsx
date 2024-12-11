@@ -10,7 +10,7 @@ export function Navigation() {
         <CustomLink
           position="left-[55%]"
           src="/assets/cinema-camera.png"
-          to="/movies"
+          to="/films"
         >
           Movies
         </CustomLink>

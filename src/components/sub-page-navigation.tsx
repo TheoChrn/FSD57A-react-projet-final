@@ -7,7 +7,7 @@ export function SubPageNavigation() {
     <nav>
       <menu className="flex flex-wrap gap-3 justify-center">
         <CustomNavLink to={"/characters"}>Characters</CustomNavLink>
-        <CustomNavLink to={"/movies"}>Movies</CustomNavLink>
+        <CustomNavLink to={"/films"}>Movies</CustomNavLink>
         <CustomNavLink to={"/vehicles"}>Vehicles</CustomNavLink>
         <CustomNavLink to={"/starships"}>Starships</CustomNavLink>
         <CustomNavLink to={"/planets"}>Planets</CustomNavLink>

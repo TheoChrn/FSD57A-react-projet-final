@@ -228,7 +228,7 @@ export function Character() {
             {!!populatedCharacter.species.length ? (
               <ul className="inline-block">
                 {populatedCharacter.species.map((spece) => (
-                  <li>
+                  <li key={spece.url}>
                     <Link
                       to={`/species/${getIdFromUrl({
                         url: spece.url,
@@ -253,7 +253,7 @@ export function Character() {
           <h2 className="text-xl">Vehicles and Starships</h2>
           <ul>
             {populatedCharacter.vehicles.map((v) => (
-              <li>
+              <li key={v.url}>
                 <Link
                   className="text-accent underline"
                   to={`/vehicles/${getIdFromUrl({ url: v.url })}`}
@@ -263,7 +263,7 @@ export function Character() {
               </li>
             ))}
             {populatedCharacter.starships.map((s) => (
-              <li>
+              <li key={s.url}>
                 <Link
                   className="text-accent underline"
                   to={`/starships/${getIdFromUrl({ url: s.url })}`}
@@ -281,7 +281,7 @@ export function Character() {
           <h2 className="text-xl">Related Films</h2>
           <ul>
             {populatedCharacter.films.map((f) => (
-              <li key={f.title}>
+              <li key={f.url}>
                 <Link
                   className="text-accent underline"
                   to={`/films/${f.episode_id}`}
