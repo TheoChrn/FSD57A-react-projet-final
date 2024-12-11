@@ -10,11 +10,13 @@ import { PagesLayout } from "@/routes/pages/pages-layout";
 import {
   Character,
   characterLoader,
-} from "@/routes/pages/characters/characterId/character";
+} from "@/routes/pages/characters/character-id/character";
 import { Suspense } from "react";
 import { QueryClient } from "@tanstack/react-query";
 import { Provider } from "react-redux";
 import { store } from "@/app/store";
+import { Films, filmsLoader } from "@/routes/pages/films/films";
+import { Film, filmLoader } from "@/routes/pages/films/film-id/film";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -60,6 +62,26 @@ const router = createBrowserRouter([
               </Suspense>
             ),
             loader: characterLoader(queryClient),
+            errorElement: <NotFound />,
+          },
+          {
+            path: "films",
+            loader: filmsLoader(queryClient),
+            element: (
+              <Suspense fallback="Chargement...">
+                <Films />
+              </Suspense>
+            ),
+            errorElement: <NotFound />,
+          },
+          {
+            path: "films/:filmId",
+            element: (
+              <Suspense fallback="Chargement du personnage...">
+                <Film />
+              </Suspense>
+            ),
+            loader: filmLoader(queryClient),
             errorElement: <NotFound />,
           },
         ],
