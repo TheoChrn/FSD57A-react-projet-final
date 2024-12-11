@@ -17,7 +17,7 @@ import { RootLayout } from "@/routes/root-layout";
 import { QueryClient } from "@tanstack/react-query";
 import { Suspense } from "react";
 import { Provider } from "react-redux";
-import { createBrowserRouter, RouterProvider } from "react-router";
+import { createHashRouter, RouterProvider } from "react-router";
 import NotFound from "./not-found";
 
 const queryClient = new QueryClient({
@@ -28,9 +28,8 @@ const queryClient = new QueryClient({
   },
 });
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
-    path: "/",
     element: <RootLayout />,
     children: [
       {
