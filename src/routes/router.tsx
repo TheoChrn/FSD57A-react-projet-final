@@ -1,35 +1,63 @@
 import Home from "@/routes/home/home";
-import { Characters } from "@/routes/pages/characters/characters";
+import {
+  Characters,
+  charactersLoader,
+} from "@/routes/pages/characters/characters";
 import { RootLayout } from "@/routes/root-layout";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import NotFound from "./not-found";
 import { PagesLayout } from "@/routes/pages/pages-layout";
-import { Character } from "@/routes/pages/characters/characterId/character";
+import {
+  Character,
+  characterLoader,
+} from "@/routes/pages/characters/characterId/character";
+import { Suspense } from "react";
+import { QueryClient } from "@tanstack/react-query";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 10,
+    },
+  },
+});
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
-    errorElement: <NotFound />,
+
     children: [
+      {
+        path: "*",
+        element: <NotFound />,
+      },
       {
         index: true,
         element: <Home />,
       },
       {
         element: <PagesLayout />,
+        errorElement: <NotFound />,
         children: [
           {
             path: "characters",
-            element: <Characters />,
-            // action: newAction(queryClient),
+            loader: charactersLoader(queryClient),
+            element: (
+              <Suspense fallback="Chargement...">
+                <Characters />
+              </Suspense>
+            ),
             errorElement: <NotFound />,
           },
           {
             path: "characters/:characterId",
-            element: <Character />,
-            // loader: contactLoader(queryClient),
-            // action: contactAction(queryClient),
+            element: (
+              <Suspense fallback="Chargement du personnage...">
+                <Character />
+              </Suspense>
+            ),
+            loader: characterLoader(queryClient),
             errorElement: <NotFound />,
           },
         ],
@@ -39,23 +67,5 @@ const router = createBrowserRouter([
 ]);
 
 export function Router() {
-  return (
-    <RouterProvider router={router} />
-    // <BrowserRouter>
-    //   <RouterRoutes>
-    //     <Route element={<RootLayout />}>
-    //       <Route index element={<Home />} />
-    //       <Route path="*" element={<NotFound />} />
-    //       <Route element={<PagesLayout />}>
-    //         <Route path="/characters" element={<Characters />} />
-    //         <Route path="/movies" element={<Movies />} />
-    //         <Route path="/vehicles" element={<Vehicles />} />
-    //         <Route path="/starships" element={<Starships />} />
-    //         <Route path="/planets" element={<Planets />} />
-    //         <Route path="/species" element={<Species />} />
-    //       </Route>
-    //     </Route>
-    //   </RouterRoutes>
-    // </BrowserRouter>
-  );
+  return <RouterProvider router={router} />;
 }

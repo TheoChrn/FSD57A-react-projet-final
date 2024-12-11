@@ -1,3 +1,10 @@
+import { Outlet } from "react-router";
+
 export default function NotFound() {
-  return <div>404 page not found</div>;
+  return (
+    <>
+      <div>Error 404 not found</div>
+      <Outlet />
+    </>
+  );
 }

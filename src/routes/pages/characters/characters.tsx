@@ -1,47 +1,42 @@
 import { fetchData } from "@/lib/get-functions";
+import { TCharacter } from "@/lib/types";
 import { getIdFromUrl } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
+import {
+  QueryClient,
+  queryOptions,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { Link } from "react-router";
 
-export type TCharacter = {
-  name: string;
-  birth_year: string;
-  eye_color: string;
-  gender: "Male" | "Female" | "unknown" | "n/a";
-  hair_color: string;
-  height: string;
-  mass: string;
-  skin_color: string;
-  homeworld: string;
-  films: string[];
-  species: string[];
-  starships: string[];
-  vehicles: string[];
-  url: string;
-  created: string;
-  edited: string;
-};
+
+
+export const charactersLoader = (queryClient: QueryClient) => async () =>
+  await queryClient.ensureQueryData(
+    queryOptions({
+      queryKey: ["characters"],
+      queryFn: () => fetchData<TCharacter>("people"),
+    })
+  );
 
 export function Characters() {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["characters"],
-    queryFn: () => fetchData<TCharacter>("people"),
-  });
-
-  if (isLoading) return "Chargement...";
+  const {
+    data: { results: characters },
+    error,
+  } = useSuspenseQuery(
+    queryOptions({
+      queryKey: ["characters"],
+      queryFn: () => fetchData<TCharacter>("people"),
+    })
+  );
 
   if (error) return error.message;
 
-  if (!data || !data.results) {
-    return <div>Aucune donnée disponible</div>;
-  }
-
   return (
     <>
-      {!!data.results.length ? (
-        <ul>
-          {data.results.map((character) => (
-            <li key={character.url}>
+      {!!characters.length ? (
+        <ul className="grid grid-cols-[repeat(auto-fill,minmax(max(200px,(100%-((3*1rem)))_/_3),1fr))] gap-4">
+          {characters.map((character) => (
+            <li className="text-center" key={character.url}>
               <Link to={`${getIdFromUrl({ url: character.url })}`}>
                 {character.name}
               </Link>
