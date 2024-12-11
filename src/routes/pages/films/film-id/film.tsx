@@ -116,11 +116,6 @@ export function Film() {
   const relatedQueries = useSuspenseQueries({
     queries: [
       ...film.characters.map((url) => ({
-        queryKey: ["planet", getIdFromUrl({ url })],
-        queryFn: () =>
-          fetchDataById<TPlanet>(`planets/${getIdFromUrl({ url })}`),
-      })),
-      ...film.characters.map((url) => ({
         queryKey: ["character", getIdFromUrl({ url })],
         queryFn: () =>
           fetchDataById<TCharacter>(`people/${getIdFromUrl({ url })}`),
@@ -152,17 +147,18 @@ export function Film() {
 
   const populatedFilm = {
     ...film,
-    planets: relatedQueries
-      .slice(startIndex, startIndex + film.planets.length)
-      .map((query) => {
-        startIndex += film.planets.length;
-        return query.data as TPlanet;
-      }),
+
     characters: relatedQueries
       .slice(startIndex, startIndex + film.characters.length)
       .map((query) => {
         startIndex += film.characters.length;
         return query.data as TCharacter;
+      }),
+    planets: relatedQueries
+      .slice(startIndex, startIndex + film.planets.length)
+      .map((query) => {
+        startIndex += film.planets.length;
+        return query.data as TPlanet;
       }),
     species: relatedQueries
       .slice(startIndex, startIndex + film.species.length)
