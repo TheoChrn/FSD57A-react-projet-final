@@ -12,6 +12,7 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { MinusCircle, PlusCircle } from "lucide-react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router";
 
@@ -24,6 +25,7 @@ export const filmsLoader = (queryClient: QueryClient) => async () =>
   );
 
 export function Films() {
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const watchList = useSelector(
     (state: RootState) => state.watchList.watchList
   );
@@ -42,11 +44,25 @@ export function Films() {
 
   if (error) return error.message;
 
+  const sortedFilms = [...films].sort((a, b) =>
+    sortOrder === "asc"
+      ? a.title.localeCompare(b.title)
+      : b.title.localeCompare(a.title)
+  );
+
   return (
-    <>
-      {!!films.length ? (
+    <section className="grid gap-8">
+      <button
+        className="border border-primary px-3 py-2 rounded w-fit mx-auto"
+        onClick={() =>
+          setSortOrder((prevState) => (prevState === "asc" ? "desc" : "asc"))
+        }
+      >
+        {sortOrder === "asc" ? "Sort Movies Z-A" : "Sort Movies A-Z"}
+      </button>
+      {!!sortedFilms.length ? (
         <ul className="grid grid-cols-[repeat(auto-fill,minmax(max(200px,(100%-((3*1rem)))_/_3),1fr))] gap-4">
-          {films.map((film) => {
+          {sortedFilms.map((film) => {
             const isInWatchList = watchList.includes(film.url);
             return (
               <li
@@ -85,6 +101,6 @@ export function Films() {
       ) : (
         <span>Aucun personnage trouvé</span>
       )}
-    </>
+    </section>
   );
 }
