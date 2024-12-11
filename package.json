@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://TheoChrn/FSD57A-react-projet-final",
+  "homepage": "https://TheoChrn.github.io/FSD57A-react-projet-final",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
