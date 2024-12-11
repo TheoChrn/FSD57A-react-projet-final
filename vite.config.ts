@@ -4,8 +4,7 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [react()],
-  base:
-    process.env.NODE_ENV === "production" ? "/FSD57A-react-projet-final/" : "/",
+  base: "/FSD57A-react-projet-final/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
