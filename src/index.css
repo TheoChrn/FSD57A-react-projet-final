@@ -38,11 +38,11 @@
 
     --accent: 54 100% 56%;
 
-    --accent-foreground: 0 0% 98%;
+    --accent-foreground: 0 0% 3.9%;
 
     --destructive: 0 62.8% 30.6%;
 
-    --destructive-foreground: 0 0% 98%;
+    --destructive-foreground: 0 0% 9%;
 
     --border: 0 0% 14.9%;
 
@@ -62,7 +62,7 @@
 
     --radius: 0.5rem;
   }
-  .dark {
+  .light {
     --background: 0 0% 0%;
 
     --foreground: 0 0% 3.9%;

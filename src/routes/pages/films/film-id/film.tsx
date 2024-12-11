@@ -6,9 +6,9 @@ import {
   SectionTitle,
 } from "@/components/sections-components";
 import {
-  addToFavorites,
-  removeFromFavorites,
-} from "@/features/favorites/favoritesSlice";
+  addToWatchList,
+  removeFromWatchList,
+} from "@/features/watchList/watchListSlice";
 import { fetchDataById } from "@/lib/get-functions";
 import {
   TCharacter,
@@ -26,9 +26,9 @@ import {
   useSuspenseQueries,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { Heart } from "lucide-react";
+import { MinusCircle, PlusCircle } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, LoaderFunctionArgs, useLoaderData } from "react-router";
+import { LoaderFunctionArgs, useLoaderData } from "react-router";
 
 export const filmLoader =
   (queryClient: QueryClient) =>
@@ -63,7 +63,7 @@ export const filmLoader =
         queryOptions({
           queryKey: ["character", getIdFromUrl({ url })],
           queryFn: () =>
-            fetchDataById<TCharacter>(`characters/${getIdFromUrl({ url })}`),
+            fetchDataById<TCharacter>(`people/${getIdFromUrl({ url })}`),
         })
       );
     });
@@ -104,8 +104,8 @@ export function Film() {
     ReturnType<ReturnType<typeof filmLoader>>
   >;
   const dispatch = useDispatch();
-  const favorites = useSelector(
-    (state: RootState) => state.favorites.favorites
+  const watchList = useSelector(
+    (state: RootState) => state.watchList.watchList
   );
 
   const { data: film, error } = useSuspenseQuery(
@@ -145,69 +145,71 @@ export function Film() {
     ],
   });
 
+  let startIndex = 0;
+
   const populatedFilm = {
     ...film,
     planets: relatedQueries
-      .slice(0, film.planets.length)
-      .map((query) => query.data as TPlanet),
+      .slice(startIndex, startIndex + film.planets.length)
+      .map((query) => {
+        startIndex += film.planets.length;
+        return query.data as TPlanet;
+      }),
     characters: relatedQueries
-      .slice(film.planets.length, film.planets.length + film.characters.length)
-      .map((query) => query.data as TCharacter),
+      .slice(startIndex, startIndex + film.characters.length)
+      .map((query) => {
+        startIndex += film.characters.length;
+        return query.data as TCharacter;
+      }),
     species: relatedQueries
-      .slice(
-        film.planets.length + film.characters.length,
-        film.planets.length + film.characters.length + film.species.length
-      )
-      .map((query) => query.data as TSpecies),
+      .slice(startIndex, startIndex + film.species.length)
+      .map((query) => {
+        startIndex += film.species.length;
+        return query.data as TSpecies;
+      }),
     starships: relatedQueries
-      .slice(
-        film.planets.length + film.characters.length + film.species.length,
-        film.planets.length +
-          film.characters.length +
-          film.species.length +
-          film.starships.length
-      )
-      .map((query) => query.data as TStarship),
+      .slice(startIndex, startIndex + film.starships.length)
+      .map((query) => {
+        startIndex += film.starships.length;
+        return query.data as TStarship;
+      }),
     vehicles: relatedQueries
-      .slice(
-        film.planets.length +
-          film.characters.length +
-          film.species.length +
-          film.starships.length,
-        film.planets.length +
-          film.characters.length +
-          film.species.length +
-          film.starships.length +
-          film.vehicles.length
-      )
-      .map((query) => query.data as TVehicle),
+      .slice(startIndex, startIndex + film.vehicles.length)
+      .map((query) => {
+        startIndex += film.vehicles.length;
+        return query.data as TVehicle;
+      }),
   };
 
   if (error) return error.message;
 
+  const isInWatchList = watchList.includes(populatedFilm.url);
+
   return (
     <section className="space-y-8 text-center">
-      <h1
-        data-favorite={favorites.includes(film.url) ? "" : undefined}
-        className="group text-3xl"
-      >
-        {populatedFilm.title}{" "}
+      <div className="space-y-2">
+        <h1
+          data-favorite={isInWatchList ? "" : undefined}
+          className="group text-3xl "
+        >
+          {populatedFilm.title}{" "}
+        </h1>
         <button
+          className="hover:scale-105 duration-200 active:scale-100 mx-auto flex items-center gap-2 px-3 py-2 border-2 rounded bg-accent text-accent-foreground"
           onClick={() =>
             dispatch(
-              favorites.includes(film.url)
-                ? removeFromFavorites(film.url)
-                : addToFavorites(film.url)
+              isInWatchList
+                ? removeFromWatchList(populatedFilm.url)
+                : addToWatchList(populatedFilm.url)
             )
           }
         >
-          <Heart
-            className="hover:fill-red-500/40 hover:stroke-red-500/40 hover:scale-110 duration-200 active:scale-100 group-data-[favorite]:fill-red-500 group-data-[favorite]:stroke-red-500"
-            size={24}
-          />
-          <span className="sr-only">Add to favorites</span>
+          {isInWatchList ? <MinusCircle size={24} /> : <PlusCircle size={24} />}
+          <span className="text-sm">
+            {isInWatchList ? "Remove from watch list" : "Add to watch list"}
+          </span>
         </button>
-      </h1>
+      </div>
       <Section>
         <SectionTitle>Film Details</SectionTitle>
         <ul>

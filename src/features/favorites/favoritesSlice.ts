@@ -18,7 +18,7 @@ export const favoriteSlice = createSlice({
     },
     removeFromFavorites: (state, action: PayloadAction<string>) => {
       const index = state.favorites.findIndex((f) => f === action.payload);
-      if (index !== -1) state.favorites.splice(index);
+      if (index !== -1) state.favorites.splice(index, 1);
     },
   },
 });
