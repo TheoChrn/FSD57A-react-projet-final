@@ -21,7 +21,7 @@ export function SubPageNavigation() {
             </span>
           )}
         </CustomNavLink>
-        <CustomNavLink className="relative" to={"/watch list"}>
+        <CustomNavLink className="relative" to={"/watch-list"}>
           Watch list
           {!!watchList.length && (
             <span className="absolute -top-1 -left-1 bg-accent  rounded-full size-4 flex justify-center items-center  text-xs text-accent-foreground">
