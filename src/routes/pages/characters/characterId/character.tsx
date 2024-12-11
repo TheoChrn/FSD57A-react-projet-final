@@ -15,7 +15,7 @@ import {
   useSuspenseQueries,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { LoaderFunctionArgs, useLoaderData } from "react-router";
+import { Link, LoaderFunctionArgs, useLoaderData } from "react-router";
 
 export const characterLoader =
   (queryClient: QueryClient) =>
@@ -133,13 +133,13 @@ export function Character() {
     homeworld: planetQuery.data,
     films: relatedQueries
       .slice(0, character.films.length)
-      .map((query) => query.data),
+      .map((query) => query.data as TFilm),
     species: relatedQueries
       .slice(
         character.films.length,
         character.films.length + character.species.length
       )
-      .map((query) => query.data),
+      .map((query) => query.data as TSpecies),
     starships: relatedQueries
       .slice(
         character.films.length + character.species.length,
@@ -147,17 +147,120 @@ export function Character() {
           character.species.length +
           character.starships.length
       )
-      .map((query) => query.data),
+      .map((query) => query.data as TStarship),
     vehicles: relatedQueries
       .slice(
         character.films.length +
           character.species.length +
           character.starships.length
       )
-      .map((query) => query.data),
+      .map((query) => query.data as TVehicle),
   };
 
   if (error) return error.message;
 
-  return <div>{populatedCharacter.name}</div>;
+  return (
+    <section className="space-y-8 text-center">
+      <h1 className="text-3xl">{populatedCharacter.name}</h1>
+      <section className="space-y-2">
+        <h2 className="text-xl">Character Details</h2>
+        <ul>
+          <li className="capitalize">
+            Birth Year: {populatedCharacter.birth_year}
+          </li>
+          <li className="capitalize">
+            Eye Color: {populatedCharacter.eye_color}
+          </li>
+          <li className="capitalize">Gender: {populatedCharacter.gender}</li>
+          <li className="capitalize">
+            Hair Color: {populatedCharacter.hair_color}
+          </li>
+          <li className="capitalize">Height: {populatedCharacter.height}</li>
+          <li className="capitalize">Mass: {populatedCharacter.mass}kg</li>
+          <li className="capitalize">
+            Skin Color: {populatedCharacter.skin_color}
+          </li>
+          <li className="capitalize">
+            Homeworld:{" "}
+            <Link
+              to={`/plantets/${getIdFromUrl({
+                url: character.homeworld,
+              })}`}
+              className="text-accent underline"
+            >
+              {populatedCharacter.homeworld.name}
+            </Link>
+          </li>
+          <li className="">
+            Species:{" "}
+            {!!populatedCharacter.species.length ? (
+              <ul className="inline-block">
+                {populatedCharacter.species.map((spece) => (
+                  <li>
+                    <Link
+                      to={`/species/${getIdFromUrl({
+                        url: spece.url,
+                      })}`}
+                      className="text-accent underline"
+                    >
+                      {spece.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              "-"
+            )}
+          </li>
+        </ul>
+      </section>
+
+      {(!!populatedCharacter.starships.length ||
+        !!populatedCharacter.vehicles.length) && (
+        <section className="space-y-2">
+          <h2 className="text-xl">Vehicles and Starships</h2>
+          <ul>
+            {populatedCharacter.vehicles.map((v) => (
+              <li>
+                <Link
+                  className="text-accent underline"
+                  to={`/vehicles/${getIdFromUrl({ url: v.url })}`}
+                >
+                  {v.name}
+                </Link>
+              </li>
+            ))}
+            {populatedCharacter.starships.map((s) => (
+              <li>
+                <Link
+                  className="text-accent underline"
+                  to={`/starships/${getIdFromUrl({ url: s.url })}`}
+                >
+                  {s.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {!!populatedCharacter.films.length && (
+        <section className="space-y-2">
+          <h2 className="text-xl">Related Films</h2>
+          <ul>
+            {populatedCharacter.films.map((f) => (
+              <li key={f.title}>
+                <Link
+                  className="text-accent underline"
+                  to={`/films/${f.episode_id}`}
+                >
+                  {f.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </section>
+  );
 }
