@@ -14,12 +14,7 @@ import {
 } from "@tanstack/react-query";
 import { Heart } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  ClientLoaderFunctionArgs,
-  Link,
-  LoaderFunctionArgs,
-  useLoaderData,
-} from "react-router";
+import { Link, LoaderFunctionArgs, useLoaderData } from "react-router";
 
 export const charactersLoader =
   (queryClient: QueryClient) =>
@@ -39,9 +34,7 @@ export const charactersLoader =
   };
 
 export function Characters() {
-  const favorites = useSelector(
-    (state: RootState) => state.favorites
-  );
+  const favorites = useSelector((state: RootState) => state.favorites);
   const { page = "1" } = useLoaderData() as Awaited<
     ReturnType<ReturnType<typeof charactersLoader>>
   >;

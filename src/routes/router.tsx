@@ -1,25 +1,24 @@
+import { store } from "@/app/store";
+import { SubPageLoader } from "@/components/sub-page-loader";
+import ErrorPage from "@/routes/error-page";
 import Home from "@/routes/home/home";
-import {
-  Characters,
-  charactersLoader,
-} from "@/routes/pages/characters/characters";
-import { RootLayout } from "@/routes/root-layout";
-import { createBrowserRouter, RouterProvider } from "react-router";
-import NotFound from "./not-found";
-import { PagesLayout } from "@/routes/pages/pages-layout";
 import {
   Character,
   characterLoader,
 } from "@/routes/pages/characters/character-id/character";
-import { Suspense } from "react";
-import { QueryClient } from "@tanstack/react-query";
-import { Provider } from "react-redux";
-import { store } from "@/app/store";
-import { Films, filmsLoader } from "@/routes/pages/films/films";
+import {
+  Characters,
+  charactersLoader,
+} from "@/routes/pages/characters/characters";
 import { Film, filmLoader } from "@/routes/pages/films/film-id/film";
-import { Spinner } from "@/components/spinner";
-import { SubPageLoader } from "@/components/sub-page-loader";
-import ErrorPage from "@/routes/error-page";
+import { Films, filmsLoader } from "@/routes/pages/films/films";
+import { PagesLayout } from "@/routes/pages/pages-layout";
+import { RootLayout } from "@/routes/root-layout";
+import { QueryClient } from "@tanstack/react-query";
+import { Suspense } from "react";
+import { Provider } from "react-redux";
+import { createBrowserRouter, RouterProvider } from "react-router";
+import NotFound from "./not-found";
 
 const queryClient = new QueryClient({
   defaultOptions: {
